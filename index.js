@@ -5,13 +5,6 @@ var PluginError = gutil.PluginError;
 var path = require('path');
 var applySourceMap = require('vinyl-sourcemaps-apply');
 
-var parseVariableOptions = function(options) {
-  var output = '';
-  Object.keys(options).forEach(function(key) {
-    output += '@' + key + ':' + options[key] + ';';
-  });
-  return output;
-};
 module.exports = function (options) {
   var _options = options || {};
 
@@ -36,14 +29,6 @@ module.exports = function (options) {
     options.paths = options.paths || [path.dirname(file.path)];
 
     var srcCode = file.contents.toString('utf8');
-
-    // Equivalent to --modify-vars option.
-    // Properties under options.modifyVars are appended as less variables
-    // to override global variables.
-    if (options.modifyVars) {
-      var modifyVarsOutput = parseVariableOptions(options.modifyVars);
-      srcCode += modifyVarsOutput;
-    }
 
     if (file.sourceMap || options.sourceMap) {
       options.sourceMap = true;
